@@ -28,6 +28,7 @@
     "@nestjs/graphql": "^11.0.6",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^9.0.1",
+    "@pdfme/generator": "^1.1.10",
     "graphql": "^16.6.0",
     "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",

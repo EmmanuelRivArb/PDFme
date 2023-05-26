@@ -1,35 +1,46 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { DocumentService } from './document.service';
 import { Document } from './entities/document.entity';
-import { CreateDocumentInput } from './dto/create-document.input';
-import { UpdateDocumentInput } from './dto/update-document.input';
+import { CreatePdfDocumentInput } from './dto/create-pdf-document.input';
+import { UpdatePdfDocumentInput } from './dto/update-pdf-document.input';
 
 @Resolver(() => Document)
 export class DocumentResolver {
   constructor(private readonly documentService: DocumentService) {}
 
   @Mutation(() => Document)
-  createDocument(@Args('createDocumentInput') createDocumentInput: CreateDocumentInput) {
-    return this.documentService.create(createDocumentInput);
+  createDocument(
+    @Args('createPdfDocumentInput')
+    createPdfDocumentInput: CreatePdfDocumentInput,
+  ): Promise<Document> {
+    return this.documentService.create(createPdfDocumentInput);
   }
 
   @Query(() => [Document], { name: 'document' })
-  findAll() {
+  findAll(): Promise<Document[]> {
     return this.documentService.findAll();
   }
 
   @Query(() => Document, { name: 'document' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string): Promise<Document> {
     return this.documentService.findOne(id);
   }
 
   @Mutation(() => Document)
-  updateDocument(@Args('updateDocumentInput') updateDocumentInput: UpdateDocumentInput) {
-    return this.documentService.update(updateDocumentInput.id, updateDocumentInput);
+  updateDocument(
+    @Args('updatePdfDocumentInput')
+    updatePdfDocumentInput: UpdatePdfDocumentInput,
+  ): Promise<Document> {
+    return this.documentService.update(
+      updatePdfDocumentInput.id,
+      updatePdfDocumentInput,
+    );
   }
 
   @Mutation(() => Document)
-  removeDocument(@Args('id', { type: () => Int }) id: number) {
+  removeDocument(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<Boolean> {
     return this.documentService.remove(id);
   }
 }
