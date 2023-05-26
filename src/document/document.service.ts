@@ -91,6 +91,6 @@ export class DocumentService {
 
     this.logger.error(error);
 
-    throw new InternalServerErrorException('Please check logs...');
+    throw new Error(error);
   }
 }
