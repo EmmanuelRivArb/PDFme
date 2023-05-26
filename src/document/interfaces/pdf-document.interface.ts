@@ -1,5 +1,6 @@
+import { Template } from '@pdfme/generator';
 export interface PdfDocument {
   id: string;
   name: string;
-  jsonData: string;
+  template: any;
 }

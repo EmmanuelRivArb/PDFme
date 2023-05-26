@@ -1,12 +1,12 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { PdfDocument } from '../interfaces/pdf-document.interface';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { GraphQLScalarType } from 'graphql';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { GraphQLJSONObject } from 'graphql-type-json';
 
-@Entity('documents')
+@Entity({ name: 'documents' })
 @ObjectType()
 export class Document implements PdfDocument {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
   id: string;
 
@@ -22,6 +22,6 @@ export class Document implements PdfDocument {
   name: string;
 
   @Column({ type: 'jsonb' })
-  @Field(() => GraphQLScalarType)
-  jsonData: any;
+  @Field(() => GraphQLJSONObject)
+  template: any;
 }

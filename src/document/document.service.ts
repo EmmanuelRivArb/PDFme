@@ -10,7 +10,9 @@ import { UpdatePdfDocumentInput } from './dto/update-pdf-document.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Document } from './entities/document.entity';
-import { PdfDocument } from './interfaces/pdf-document.interface';
+import { generate, Template } from '@pdfme/generator';
+import path from 'path';
+const fs = require('fs');
 
 @Injectable()
 export class DocumentService {
@@ -24,11 +26,14 @@ export class DocumentService {
     createPdfDocumentInput: CreatePdfDocumentInput,
   ): Promise<Document> {
     try {
-      const pdfDocument = this.pdfDocumentRepository.create({
+      const pdfDocument = await this.pdfDocumentRepository.create({
         ...createPdfDocumentInput,
       });
 
-      return await this.pdfDocumentRepository.save(pdfDocument);
+      const savedPdf = await this.pdfDocumentRepository.save(pdfDocument);
+      this.generatePDF(await this.findOne(savedPdf.id));
+
+      return savedPdf;
     } catch (error) {
       this.handlerDBError(error);
     }
@@ -73,7 +78,14 @@ export class DocumentService {
     return true;
   }
 
-  private generatePDF(pdfDocument: Document) {}
+  private async generatePDF(pdfDocument: Document) {
+    const template: Template = pdfDocument.template;
+    const inputs = template.sampledata;
+
+    const pdf = await generate({ template, inputs });
+    fs.writeFileSync(pdfDocument.name, pdf);
+  }
+
   private handlerDBError(error: any): never {
     if (error.code === '23505') throw new BadRequestException(error.detail);
 

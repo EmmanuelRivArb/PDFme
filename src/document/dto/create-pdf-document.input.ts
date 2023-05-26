@@ -1,12 +1,13 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { PdfDocument } from '../interfaces/pdf-document.interface';
 import { GraphQLScalarType } from 'graphql';
+import { GraphQLJSONObject } from 'graphql-type-json';
 
 @InputType()
 export class CreatePdfDocumentInput implements Omit<PdfDocument, 'id'> {
   @Field(() => String)
   name: string;
 
-  @Field(() => GraphQLScalarType)
-  jsonData: any;
+  @Field(() => GraphQLJSONObject)
+  template: any;
 }
