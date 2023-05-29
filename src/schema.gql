@@ -19,10 +19,10 @@ type Query {
 }
 
 type Mutation {
-  createDocument(createPdfDocumentInput: CreatePdfDocumentInput!): Document!
-  updateDocument(updatePdfDocumentInput: UpdatePdfDocumentInput!): Document!
-  removeDocument(id: String!): Document!
-  generatePdfDocument(id: String!): Document!
+  createDocument(createPdfDocumentInput: CreatePdfDocumentInput!): String!
+  updateDocument(updatePdfDocumentInput: UpdatePdfDocumentInput!): String!
+  removeDocument(id: String!): Boolean!
+  generatePdfDocument(id: String!): Boolean!
 }
 
 input CreatePdfDocumentInput {

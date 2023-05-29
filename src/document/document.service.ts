@@ -23,14 +23,14 @@ export class DocumentService {
 
   async create(
     createPdfDocumentInput: CreatePdfDocumentInput,
-  ): Promise<Document> {
+  ): Promise<String> {
     try {
       const pdfDocument = await this.pdfDocumentRepository.create({
         ...createPdfDocumentInput,
       });
 
-      const savedPdf = await this.pdfDocumentRepository.save(pdfDocument);
-      return savedPdf;
+      const savedPdfDocument = await this.pdfDocumentRepository.save(pdfDocument);
+      return savedPdfDocument.id;
       
     } catch (error) {
       this.handlerDBError(error);
@@ -51,7 +51,7 @@ export class DocumentService {
 
   async update(
     updateDocumentInput: UpdatePdfDocumentInput,
-  ): Promise<Document> {
+  ): Promise<String> {
     try {
       const pdfDocument = await this.pdfDocumentRepository.preload(
         updateDocumentInput,
@@ -70,10 +70,9 @@ export class DocumentService {
         );
       }
       
-
       const savedPdfDocument =  await this.pdfDocumentRepository.save(updateDocumentInput);
-      return await this.findOne(savedPdfDocument.id);
-      
+      return savedPdfDocument.id;
+
     } catch (error) {
       this.handlerDBError(error);
     }
@@ -85,11 +84,11 @@ export class DocumentService {
     return true;
   }
 
-  async generatePdfDocument(id:string):Promise<Document> {
+  async generatePdfDocument(id:string):Promise<Boolean> {
 
     const pdfDocument = await this.findOne(id);
     this.generatePDF(pdfDocument);
-    return pdfDocument;
+    return true;
   }
 
   private async generatePDF(pdfDocument: Document) {

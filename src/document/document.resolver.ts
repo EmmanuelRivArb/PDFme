@@ -9,11 +9,11 @@ import { generate } from '@pdfme/generator';
 export class DocumentResolver {
   constructor(private readonly documentService: DocumentService) {}
 
-  @Mutation(() => Document)
+  @Mutation(() => String)
   createDocument(
     @Args('createPdfDocumentInput')
     createPdfDocumentInput: CreatePdfDocumentInput,
-  ): Promise<Document> {
+  ): Promise<String> {
     return this.documentService.create(createPdfDocumentInput);
   }
 
@@ -27,27 +27,27 @@ export class DocumentResolver {
     return this.documentService.findOne(id);
   }
 
-  @Mutation(() => Document)
+  @Mutation(() => String)
   updateDocument(
     @Args('updatePdfDocumentInput')
     updatePdfDocumentInput: UpdatePdfDocumentInput,
-  ): Promise<Document> {
+  ): Promise<String> {
     return this.documentService.update(
       updatePdfDocumentInput,
     );
   }
 
-  @Mutation(() => Document)
+  @Mutation(() => Boolean)
   removeDocument(
     @Args('id', { type: () => String }) id: string,
   ): Promise<Boolean> {
     return this.documentService.remove(id);
   }
 
-  @Mutation(() => Document)
+  @Mutation(() => Boolean)
   generatePdfDocument(
     @Args('id', { type: () => String }) id: string,
-  ): Promise<Document> {
+  ): Promise<Boolean> {
     return this.documentService.generatePdfDocument(id);
   }
 }
