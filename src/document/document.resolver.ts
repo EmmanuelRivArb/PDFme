@@ -16,7 +16,7 @@ export class DocumentResolver {
     return this.documentService.create(createPdfDocumentInput);
   }
 
-  @Query(() => [Document], { name: 'document' })
+  @Query(() => [Document], { name: 'documents' })
   findAll(): Promise<Document[]> {
     return this.documentService.findAll();
   }
