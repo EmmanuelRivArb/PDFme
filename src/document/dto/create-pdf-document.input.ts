@@ -1,6 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { PdfDocument } from '../interfaces/pdf-document.interface';
-import { GraphQLScalarType } from 'graphql';
 import { GraphQLJSONObject } from 'graphql-type-json';
 
 @InputType()

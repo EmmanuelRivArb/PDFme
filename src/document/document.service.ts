@@ -11,7 +11,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Document } from './entities/document.entity';
 import { generate, Template } from '@pdfme/generator';
-import path from 'path';
 const fs = require('fs');
 
 @Injectable()
@@ -31,9 +30,8 @@ export class DocumentService {
       });
 
       const savedPdf = await this.pdfDocumentRepository.save(pdfDocument);
-      this.generatePDF(await this.findOne(savedPdf.id));
-
       return savedPdf;
+      
     } catch (error) {
       this.handlerDBError(error);
     }
@@ -52,7 +50,6 @@ export class DocumentService {
   }
 
   async update(
-    id: string,
     updateDocumentInput: UpdatePdfDocumentInput,
   ): Promise<Document> {
     try {
@@ -66,7 +63,17 @@ export class DocumentService {
         );
       }
 
-      return await this.pdfDocumentRepository.save(updateDocumentInput);
+      if(pdfDocument.name.trim() == '')
+      {
+        throw new BadRequestException(
+          'Name of the pdf document can not be empty',
+        );
+      }
+      
+
+      const savedPdfDocument =  await this.pdfDocumentRepository.save(updateDocumentInput);
+      return await this.findOne(savedPdfDocument.id);
+      
     } catch (error) {
       this.handlerDBError(error);
     }
@@ -76,6 +83,13 @@ export class DocumentService {
     const pdfDocument = await this.findOne(id);
     this.pdfDocumentRepository.remove(pdfDocument);
     return true;
+  }
+
+  async generatePdfDocument(id:string):Promise<Document> {
+
+    const pdfDocument = await this.findOne(id);
+    this.generatePDF(pdfDocument);
+    return pdfDocument;
   }
 
   private async generatePDF(pdfDocument: Document) {

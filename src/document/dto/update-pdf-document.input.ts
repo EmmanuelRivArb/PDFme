@@ -1,10 +1,15 @@
-import { CreatePdfDocumentInput } from './create-pdf-document.input';
-import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
+import { GraphQLJSONObject } from 'graphql-type-json';
+import { PdfDocument } from '../interfaces/pdf-document.interface';
+import { InputType, Field, ID } from '@nestjs/graphql';
 
 @InputType()
-export class UpdatePdfDocumentInput extends PartialType(
-  CreatePdfDocumentInput,
-) {
+export class UpdatePdfDocumentInput implements Partial<PdfDocument> {
   @Field(() => ID)
   id: string;
+
+  @Field(() => String, {nullable:true})
+  name?: string;
+
+  @Field(() => GraphQLJSONObject, {nullable:true})
+  template?: any;
 }

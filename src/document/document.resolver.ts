@@ -3,6 +3,7 @@ import { DocumentService } from './document.service';
 import { Document } from './entities/document.entity';
 import { CreatePdfDocumentInput } from './dto/create-pdf-document.input';
 import { UpdatePdfDocumentInput } from './dto/update-pdf-document.input';
+import { generate } from '@pdfme/generator';
 
 @Resolver(() => Document)
 export class DocumentResolver {
@@ -32,7 +33,6 @@ export class DocumentResolver {
     updatePdfDocumentInput: UpdatePdfDocumentInput,
   ): Promise<Document> {
     return this.documentService.update(
-      updatePdfDocumentInput.id,
       updatePdfDocumentInput,
     );
   }
@@ -42,5 +42,12 @@ export class DocumentResolver {
     @Args('id', { type: () => String }) id: string,
   ): Promise<Boolean> {
     return this.documentService.remove(id);
+  }
+
+  @Mutation(() => Document)
+  generatePdfDocument(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<Document> {
+    return this.documentService.generatePdfDocument(id);
   }
 }

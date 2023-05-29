@@ -22,6 +22,7 @@ type Mutation {
   createDocument(createPdfDocumentInput: CreatePdfDocumentInput!): Document!
   updateDocument(updatePdfDocumentInput: UpdatePdfDocumentInput!): Document!
   removeDocument(id: String!): Document!
+  generatePdfDocument(id: String!): Document!
 }
 
 input CreatePdfDocumentInput {
@@ -30,7 +31,7 @@ input CreatePdfDocumentInput {
 }
 
 input UpdatePdfDocumentInput {
+  id: ID!
   name: String
   template: JSONObject
-  id: ID!
 }

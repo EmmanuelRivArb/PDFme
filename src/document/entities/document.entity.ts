@@ -2,6 +2,7 @@ import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { PdfDocument } from '../interfaces/pdf-document.interface';
 import {
   BeforeInsert,
+  BeforeRecover,
   BeforeUpdate,
   Column,
   DeleteDateColumn,
@@ -35,7 +36,6 @@ export class Document implements PdfDocument {
   template: any;
 
   @BeforeInsert()
-  @BeforeUpdate()
   replaceEmptyStringAsNull() {
     if (this.name.trim() === '') {
       throw new BadRequestException(
